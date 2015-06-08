@@ -74,8 +74,8 @@ def process_location(json_,df,row):
 
 def process_deals(json_,d_row,o_row,biz_id):
 	'''
-	Takes the deals dictionary and adds to the deals_df and options_df
-	for the deals_df. 
+	Takes the deals dictionary and parses information and 
+	puts into an interim deals dataframe as well as a interim options dataframe.
 	'''
 	deals_interim_df = pd.DataFrame(index=[d_row],columns=deal_columns)
 	deals_interim_df['id'][d_row] = biz_id
@@ -86,6 +86,7 @@ def process_deals(json_,d_row,o_row,biz_id):
 	for key in json_.keys():
 		if key == "options":
 			had_options = True
+			#Takes the options dictionary and appends to interim options dataframe row by row
 			for option in json_[key]:
 				frames = [options_interim_df,process_deal_options(option,len(options_interim_df)+1,json_['id'])]
 				options_interim_df = pd.concat(frames)
@@ -97,6 +98,10 @@ def process_deals(json_,d_row,o_row,biz_id):
 	return deals_interim_df,None
 
 def process_deal_options(json_,o_row,deal_id):
+	'''
+	Takes the options dictionary and generates a 1 row dataframe which is appended to the 
+	interim options dataframe in the process_deals function.
+	'''
 	options_interim_df = pd.DataFrame(index=[o_row],columns=deal_option_columns)
 	options_interim_df['deals.id'][o_row] = deal_id
 	for key in json_.keys():
@@ -104,6 +109,11 @@ def process_deal_options(json_,o_row,deal_id):
 	return options_interim_df
 
 def process_gifts(json_,d_row,o_row,biz_id):
+	'''
+	Takes the gift_certificates dictionary and parses the JSON
+	and puts into a interim gifts dataframe as well as a interim 
+	options dataframe.
+	'''
 	gifts_interim_df = pd.DataFrame(index=[d_row],columns=gift_certificate_columns)
 	gifts_interim_df['id'][d_row] = biz_id
 
@@ -112,6 +122,7 @@ def process_gifts(json_,d_row,o_row,biz_id):
 	had_options = False
 	for key in json_.keys():
 		if key == "options":
+			#Takes the options dictionary and appends to interm options datafram row by row.
 			for option in json_[key]:
 				frames = [options_interim_df,process_gift_options(option,o_row,json_['id'])]
 				options_interim_df = pd.concat(frames)
@@ -122,6 +133,10 @@ def process_gifts(json_,d_row,o_row,biz_id):
 	return gifts_interim_df,None
 
 def process_gift_options(json_,o_row,gift_id):
+	'''
+	Takes the options dictionary and generates a 1 row dataframe which is appended 
+	to the interm options dataframe in the process_gifts function above.
+	'''
 	options_interim_df = pd.DataFrame(index=[o_row],columns=gift_certificate_option_columns)
 	options_interim_df['gift_certificates.id'][o_row] = gift_id
 	for key in json_.keys():
