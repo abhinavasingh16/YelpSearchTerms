@@ -5,6 +5,7 @@ import oauth2
 import urllib
 import urllib2
 import json
+import time
 
 search_term = ""
 location = ""
@@ -50,12 +51,12 @@ def search(std_url,payload):
 			'oauth_consumer_key': CONSUMER_KEY
 		}
 	)
-	print(std_url)
+	#print(std_url)
 	token = oauth2.Token(TOKEN, TOKEN_SECRET)
 	oauth_request.sign_request(oauth2.SignatureMethod_HMAC_SHA1(), consumer, token)
 	signed_url = oauth_request.to_url()
 
-	#conn = urllib2.urlopen(signed_url,None)
+	conn = urllib2.urlopen(signed_url,None)
 	try:
 		response = json.loads(conn.read())
 	finally:
@@ -152,7 +153,7 @@ def main(cmmd):
 	#Parse command line
 	search_term = cmmd[1]
 	location = cmmd[2]
-	print(len(cmmd))
+	#print(len(cmmd))
 	if len(cmmd) > 3:
 		new_file_name = cmmd[3]
 		json_dump = open(new_file_name,'w')
@@ -185,10 +186,12 @@ def main(cmmd):
 	while (offset < number_of_terms):
 		payload['offset'] = offset
 		try:
+			time.sleep(1)
 			response = search('http://api.yelp.com/v2/search',payload)
 		except urllib2.HTTPError as error:
+			print("Got a bad HTTP error")
 			print(main_df)
-			print()
+			sys.exit()
 		offset+=20
 		main_row = 0;
 		for biz_json in response['businesses']:
@@ -224,6 +227,7 @@ def main(cmmd):
 					main_df[key][main_row] = biz_json[key]
 			main_row+=1
 		print("Finished processing 20 json responses we have {0} responses to go.".format(number_of_terms-offset))
+	
 	print(main_df)
 	#JOIN dataframes and convert data frame to csv for future usage. 
 
