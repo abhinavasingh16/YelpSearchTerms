@@ -27,11 +27,9 @@ I have emailed you all the python script which is labelled PubFinder.py. I want 
 
 5. Press enter and it will start running. This takes time as you have to make a ton of API calls to the yelp server and get about 4000 rows of data and parse them all.
 	
-6. When it is done. Type ls into the terminal.
+6. Now if you close the terminal app and go to your desktop, you should see a output.txt file and a output.csv file. The txt file has the raw json formats and the output.csv file has a flat tabular representation of the data which you can port over to microsoft excell for further analysis. 
 	
-7. Now if you close the terminal app and go to your desktop, you should see a output.txt file and a output.csv file. The txt file has the raw json formats and the output.csv file has a flat tabular representation of the data which you can port over to microsoft excell for further analysis. 
-	
-8. Congrats you are done!
+7. Congrats you are done!
 
 
 -OTHER-
